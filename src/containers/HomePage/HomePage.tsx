@@ -57,6 +57,31 @@ export const HomePage: React.FC<HomePageProps> = ({ className, ...props }) => {
     setPrompt('')
   }
 
+  const onPromptEdit = async (id: number, prompt: string) => {
+    setGenerating(true)
+
+    // slice messages to the point where user edit
+    const slicedMessages = messages.slice(0, id)
+
+    // add new prompt
+    setMessages((_) => [
+      ...slicedMessages,
+      {
+        role: 'user',
+        message: prompt,
+      },
+    ])
+
+    const { message } = await chatApi({
+      prompt,
+      files: fileList.filter((f) => selectedFiles.includes(f.id)),
+      history: messages,
+    })
+
+    setGenerating(false)
+    setMessages((value) => [...value, message])
+  }
+
   useEffect(() => {
     setSelectedFiles([])
   }, [search.data])
@@ -90,6 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({ className, ...props }) => {
       />
       <ChatMessages
         className="py-[20px]"
+        onPromptEdit={(id: number, prompt: string) => onPromptEdit(id, prompt)}
         data={messages.map((msg) => ({
           role: msg.role,
           message: msg.message,

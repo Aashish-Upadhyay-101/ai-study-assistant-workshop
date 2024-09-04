@@ -7,10 +7,12 @@ export type ChatMessagesProps = Omit<
   'data'
 > & {
   data?: Pick<ChatMessageProps, 'message' | 'role' | 'disableAnimation'>[]
+  onPromptEdit?: (id: number, prompt: string) => void
 }
 
 export const ChatMessages: React.FC<ChatMessagesProps> = ({
   data = [],
+  onPromptEdit,
   ...props
 }) => {
   const ref = useRef<HTMLDivElement>(null)
@@ -42,8 +44,11 @@ export const ChatMessages: React.FC<ChatMessagesProps> = ({
     >
       {data.map((message, index) => (
         <ChatMessage
+          // @ts-ignore
+          id={index}
           key={index}
           role={message.role}
+          onPromptEdit={onPromptEdit}
           message={message.message}
           disableAnimation={message.disableAnimation || index < data.length - 1}
         />
