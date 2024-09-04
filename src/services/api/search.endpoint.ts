@@ -84,7 +84,7 @@ export const searchApi = async ({
         type = 'document'
       } else if (__typename === 'TextDocument') {
         type = 'document'
-        if (ext === 'pdf') type = 'pdf'
+        if (ext === '.pdf') type = 'pdf'
       } else if (__typename === 'VideoFile') {
         type = 'video'
       } else if (__typename === 'AudioFile') {
