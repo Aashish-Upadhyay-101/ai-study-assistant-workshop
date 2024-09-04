@@ -105,10 +105,11 @@ export const Search: React.FC<SearchProps> = ({
       />
 
       <div className="flex justify-center gap-4 mb-10">
-        {filterOptions.map((filter) => {
+        {filterOptions.map((filter, index) => {
           const IconComponent = iconMap[filter.type]
           return (
             <span
+              key={index}
               className={`py-2 px-4 flex items-center select-none gap-2 shadow-md rounded-full hover:cursor-pointer ${filters.includes(filter.type) && 'bg-slate-200/70'}`}
               onClick={() => filterToggle(filter.type)}
             >
