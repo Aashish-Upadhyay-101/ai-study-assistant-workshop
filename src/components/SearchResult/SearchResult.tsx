@@ -5,6 +5,7 @@ import React, { useMemo } from 'react'
 import { ContextPanel } from '../ContextPanel/ContextPanel'
 import { FileCard } from '../FileCard'
 import { FolderCard } from '../FolderCard'
+import { filterFileType } from '../Search/Search'
 import {
   AudioFileIcon,
   DraftIcon,
@@ -36,6 +37,7 @@ export type SearchResultProps = Omit<
 
   hideList?: boolean
   compactOverview?: boolean
+  filters?: filterFileType[]
 }
 
 export const SearchResult: React.FC<SearchResultProps> = ({
@@ -47,6 +49,7 @@ export const SearchResult: React.FC<SearchResultProps> = ({
   className,
   hideList = false,
   compactOverview = false,
+  filters,
   ...props
 }) => {
   const map: Record<string, FileData> = useMemo(
@@ -61,6 +64,16 @@ export const SearchResult: React.FC<SearchResultProps> = ({
     ],
     [files, map],
   )
+
+  const filteredFilesGroup = useMemo(() => {
+    if (filters && filters?.length > 0) {
+      return filesGroup.filter((f) =>
+        filters?.includes(f.type as filterFileType),
+      )
+    }
+
+    return filesGroup
+  }, [filters, filesGroup])
 
   const onSelectionChange = (newValue: string[]) => {
     if (onSelect) onSelect(newValue)
@@ -160,7 +173,7 @@ export const SearchResult: React.FC<SearchResultProps> = ({
 
               <Divider className="my-2" />
 
-              {filesGroup.map((item, index) => {
+              {filteredFilesGroup.map((item, index) => {
                 const IconComponent = iconMap[item.type]
 
                 return (
