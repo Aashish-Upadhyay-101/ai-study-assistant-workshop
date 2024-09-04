@@ -73,7 +73,7 @@ export const Search: React.FC<SearchProps> = ({
       type: 'audio',
     },
     {
-      name: 'MP/Video',
+      name: 'MP4/Video',
       type: 'video',
     },
   ]
